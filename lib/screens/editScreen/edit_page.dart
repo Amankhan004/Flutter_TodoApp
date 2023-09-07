@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/constants/app_lists.dart';
 
-class AddPageList extends StatefulWidget {
-  const AddPageList({Key? key}) : super(key: key);
+class EditPageList extends StatefulWidget {
+  final int index;
+
+  EditPageList({Key? key, required this.index}) : super(key: key);
 
   @override
-  State<AddPageList> createState() => _AddPageListState();
+  State<EditPageList> createState() => _EditPageListState();
 }
 
-class _AddPageListState extends State<AddPageList> {
+class _EditPageListState extends State<EditPageList> {
   TextEditingController titleController = TextEditingController();
   TextEditingController discriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    titleController.text = AppList.titleLists[widget.index];
+    discriptionController.text = AppList.discriptionLists[widget.index];
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text("Add Todo")),
+        title: const Center(child: Text("Edit Todo")),
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
@@ -45,11 +54,8 @@ class _AddPageListState extends State<AddPageList> {
                 String description = discriptionController.text;
 
                 if (title.isNotEmpty && description.isNotEmpty) {
-                  AppList.titleLists.add(title);
-                  AppList.discriptionLists.add(description);
-
-                  titleController.clear();
-                  discriptionController.clear();
+                  AppList.titleLists[widget.index] = title;
+                  AppList.discriptionLists[widget.index] = description;
 
                   Navigator.of(context).pop({
                     'title': title,
@@ -58,7 +64,7 @@ class _AddPageListState extends State<AddPageList> {
                 }
               });
             },
-            child: const Text("Submit"),
+            child: const Text("Update"),
           ),
         ],
       ),
